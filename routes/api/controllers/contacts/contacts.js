@@ -1,16 +1,23 @@
 import express from 'express';
-import model from '../../model/index';
-import { validateCreate, validateUpdate, validateId } from './validation';
+import modelsContacts from '../../../../models/contacts';
+import {
+    validateCreate,
+    validateUpdate,
+    validateId
+} from '../../midllewares/validations/contactsValidation';
 const router = express.Router();
 
+console.log(modelsContacts);
+
+
 router.get('/', async (req, res, next) => {
-  const contacts = await model.listContacts();
+  const contacts = await modelsContacts.listContacts();
   res.status(200).json(contacts);
 })
 
 router.get('/:id', validateId, async (req, res, next) => {
   const { id } = req.params; 
-  const contact = await model.getContactById(id);
+  const contact = await modelsContacts.getContactById(id);
   if (contact) {
      return res.status(200).json(contact);
   }
@@ -18,13 +25,13 @@ router.get('/:id', validateId, async (req, res, next) => {
 })
 
 router.post('/', validateCreate, async (req, res, next) => {
-  const newContact = await model.addContact(req.body);
+  const newContact = await modelsContacts.addContact(req.body);
   res.status(201).json(newContact);
 })
 
 router.delete('/:id', validateId, async (req, res, next) => {
   const { id } = req.params; 
-  const contact = await model.removeContact(id);
+  const contact = await modelsContacts.removeContact(id);
   if (contact) {
      return res.status(200).json({ message: 'Contact deleted' });
   }
@@ -33,7 +40,7 @@ router.delete('/:id', validateId, async (req, res, next) => {
 
 router.put('/:id', validateId, validateUpdate, async (req, res, next) => {
   const { id } = req.params; 
-  const contact = await model.updateContact(id, req.body);
+  const contact = await modelsContacts.updateContact(id, req.body);
   if (contact) {
      return res.status(200).json(contact);
   }
