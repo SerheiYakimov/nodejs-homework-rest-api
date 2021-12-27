@@ -1,20 +1,15 @@
-import fs from 'fs/promises';
-import path from 'path';
-import contacts from '../../db/contacts.json';
-import { fileURLToPath } from 'url';
+import db from '../../db/db';
+import {ObjectId} from 'mongodb'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url)); 
+const getCollection = async (db, name) => {
+    const client = await db;
+    const collection = await client.db().collection(name);
+    return collection;
+}
 
 export const removeContact = async (contactId) => {
-  const [contact] = contacts.filter((contact) => contact.id === contactId);
-  const indexContact = contacts.indexOf(contact);
-    if (indexContact !== -1) {
-      contacts.splice(indexContact, 1);
-      await fs.writeFile(
-          path.join(__dirname, '../', '../', 'db', 'contacts.json'),
-          JSON.stringify(contacts, null, 2)
-      );
-      return contact;
-    }
-    return null;
+  const collection = await getCollection(db, 'contacts');
+  const id = ObjectId(contactId);
+  const { value: result } = await collection.findOneAndDelete({ _id: id});
+  return result;
 }
