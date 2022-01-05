@@ -4,6 +4,7 @@ import cors from 'cors';
 import { HttpCode } from './lib/constants';
 
 import contactsRouter from './routes/api/contacts';
+import authRouter from './routes/api/auth';
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/contacts', contactsRouter);
+app.use('/api/auth', authRouter);
 
 app.use((_req, res) => {
   res
