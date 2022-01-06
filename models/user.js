@@ -1,7 +1,7 @@
 import pkg from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { Role } from '../lib/constants';
-import users from '../repository/users';
+
 const { Schema, model } = pkg;
 
 const userSchema = new Schema({
