@@ -1,20 +1,17 @@
 import { Router } from 'express';
 import { registration, login, logout } from '../../../controllers/auth';
 import guard from '../../../midllewares/guard/guard';
-// import {
-//     validateCreate,
-//     validateUpdate,
-//     validateId,
-//     validateUpdateFavorite,
-//     validateQuery,
-// } from '../../../midllewares/validations/contactsValidation';
+import {
+    validateSingup,
+    validateLogin,
+} from '../../../midllewares/validations/usersValidation';
 
 const router = new Router();
 
 
 
-router.post('/registration', registration);
-router.post('/login', login);
+router.post('/registration', validateSingup, registration);
+router.post('/login', validateLogin, login);
 router.post('/logout', guard, logout);
 
 

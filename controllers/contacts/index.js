@@ -2,8 +2,8 @@ import repositoryContacts from '../../repository/contacts';
 import { HttpCode } from '../../lib/constants';
 
 const getContacts = async (req, res, _next) => {
-  console.log(req.query);
-  const contacts = await repositoryContacts.listContacts(req.query);
+  const { id: userId } = req.user;
+  const contacts = await repositoryContacts.listContacts(userId, req.query);
   res.status(HttpCode.OK).json(
     {
       status: 'success',
@@ -13,8 +13,9 @@ const getContacts = async (req, res, _next) => {
 }
 
 const getContactById = async (req, res, _next) => {
-  const { id } = req.params; 
-  const contact = await repositoryContacts.getContactById(id);
+  const { id } = req.params;
+  const { id: userId } = req.user;
+  const contact = await repositoryContacts.getContactById(userId, id);
   console.log(contact);
   if (contact) {
      return res.status(HttpCode.OK).json({
@@ -33,7 +34,8 @@ const getContactById = async (req, res, _next) => {
 }
 
 const addContact = async (req, res, _next) => {
-  const newContact = await repositoryContacts.addContact(req.body);
+  const { id: userId } = req.user;
+  const newContact = await repositoryContacts.addContact(userId, req.body);
   res
     .status(HttpCode.CREATED)
     .json({
@@ -44,8 +46,9 @@ const addContact = async (req, res, _next) => {
 }
 
 const removeContact = async (req, res, _next) => {
-  const { id } = req.params; 
-  const contact = await repositoryContacts.removeContact(id);
+  const { id } = req.params;
+  const { id: userId } = req.user;
+  const contact = await repositoryContacts.removeContact(userId, id);
   if (contact) {
     return res
       .status(HttpCode.OK)
@@ -64,8 +67,9 @@ const removeContact = async (req, res, _next) => {
 }
 
 const updateContact = async (req, res, _next) => {
-  const { id } = req.params; 
-  const contact = await repositoryContacts.updateContact(id, req.body);
+  const { id } = req.params;
+  const { id: userId } = req.user;
+  const contact = await repositoryContacts.updateContact(userId, id, req.body);
   if (contact) {
     return res
       .status(HttpCode.OK)
