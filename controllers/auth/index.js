@@ -55,4 +55,5 @@ const logout = async (req, res, _next) => {
     });
 }
 
-export {registration, login, logout}
+
+export { registration, login, logout }

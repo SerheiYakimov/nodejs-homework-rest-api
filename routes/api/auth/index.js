@@ -8,8 +8,6 @@ import {
 
 const router = new Router();
 
-
-
 router.post('/registration', validateSingup, registration);
 router.post('/login', validateLogin, login);
 router.post('/logout', guard, logout);
