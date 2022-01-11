@@ -21,13 +21,15 @@ const updateSchema = Joi.object({
     phone: Joi.string().optional(),
     age: Joi.number().integer().min(MIN_AGE).max(MAX_AGE).optional(),
     favorite: Joi.bool().optional(),
-}).or('name', 'email', 'phone', 'age')
+}).or('name', 'email', 'phone', 'age', 'favorite')
 
 const updateFavoriteSchema = Joi.object({
     favorite: Joi.bool().required(),
 })
 
+
 const querySchema = Joi.object({
+    favorite: Joi.bool().required(),
     limit: Joi.string().pattern(new RegExp('\\d+')).optional(),
     skip: Joi.number().min(0).optional(),
     sortBy: Joi.string().valid('name', 'email', 'age', 'phone', 'favorite').optional(),
@@ -104,3 +106,4 @@ export const validateQuery = async (req, res, next) => {
     }
     next()
 }
+

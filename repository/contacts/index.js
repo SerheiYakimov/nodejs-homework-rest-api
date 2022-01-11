@@ -6,12 +6,13 @@ import { removeContact } from './removeContact';
 import { updateContact } from './updateContact';
 
 
+
 export default {
     listContacts,
     getContactById,
     addContact,
     removeContact,
-    updateContact
+    updateContact,
 };
 
 
