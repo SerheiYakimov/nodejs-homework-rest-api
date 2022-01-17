@@ -2,7 +2,7 @@ import express from 'express';
 import logger from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
-import { HttpCode } from './lib/constants';
+import { HttpCode, LIMIT_JSON } from './lib/constants';
 
 import contactsRouter from './routes/api/contacts';
 import authRouter from './routes/api/auth';
@@ -17,7 +17,7 @@ app.use(helmet());
 app.use(logger(formatsLogger));
 app.use(express.static(process.env.FOLDER_FOR_AVATARS));
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: LIMIT_JSON }));
 
 app.use('/api/contacts', contactsRouter);
 app.use('/api/auth', authRouter);
