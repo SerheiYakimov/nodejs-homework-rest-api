@@ -1,4 +1,3 @@
-import { TestWatcher } from '@jest/core';
 import { jest } from '@jest/globals';
 import { registration } from './index';
 import { HttpCode } from '../../lib/constants';
@@ -31,7 +30,7 @@ describe('Unit test registration', () => {
         expect(authService.isUserExist).toHaveBeenCalledWith(req.body.email)
         expect(res.status).toHaveBeenCalledWith(HttpCode.CONFLICT)
     });
-    
+
     test('SingUp with error database', async () => {
         const testError = new Error('Database Error')
         authService.isUserExist = jest.fn(async () => {
