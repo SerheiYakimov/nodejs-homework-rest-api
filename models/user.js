@@ -1,6 +1,7 @@
 import pkg from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { Role } from '../lib/constants';
+import gravatar from 'gravatar';
 
 const { Schema, model } = pkg;
 
@@ -38,6 +39,12 @@ const userSchema = new Schema({
             message: 'Role is not allowed'
         },
         default: Role.USER,
+    },
+    avatarURL: {
+        type: String,
+        default: function () {
+            return gravatar.url(this.email, { s: '250' }, true);
+        }
     }
 }, {
         versionKey: false,
