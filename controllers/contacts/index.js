@@ -1,5 +1,6 @@
 import repositoryContacts from '../../repository/contacts';
 import { HttpCode } from '../../lib/constants';
+import { CustomError } from '../../lib/custom-error';
 
 const getContacts = async (req, res, _next) => {
   const { id: userId } = req.user;
@@ -16,7 +17,7 @@ const getContactById = async (req, res, _next) => {
   const { id } = req.params;
   const { id: userId } = req.user;
   const contact = await repositoryContacts.getContactById(userId, id);
-  console.log(contact);
+  // console.log(contact);
   if (contact) {
      return res.status(HttpCode.OK).json({
       status: 'success',
@@ -24,13 +25,14 @@ const getContactById = async (req, res, _next) => {
       data: { contact },
     });
   }
-  res
-    .status(HttpCode.NOT_FOUND)
-    .json({
-      status: 'error',
-      code: HttpCode.NOT_FOUND,
-      message: 'Not found',
-    })
+  throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
+  // res
+  //   .status(HttpCode.NOT_FOUND)
+  //   .json({
+  //     status: 'error',
+  //     code: HttpCode.NOT_FOUND,
+  //     message: 'Not found',
+  //   })
 }
 
 const addContact = async (req, res, _next) => {
@@ -58,12 +60,7 @@ const removeContact = async (req, res, _next) => {
       data: { contact },
     });
   }
-  res.status(HttpCode.NOT_FOUND)
-    .json({
-      status: 'error',
-      code: HttpCode.NOT_FOUND,
-      message: 'Not found',
-    })
+  throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
 }
 
 const updateContact = async (req, res, _next) => {
@@ -79,13 +76,7 @@ const updateContact = async (req, res, _next) => {
       data: { contact },
     });
   }
-  res
-    .status(HttpCode.NOT_FOUND)
-    .json({
-      status: 'error',
-      code: HttpCode.NOT_FOUND,
-      message: 'Not found',
-    })
+  throw new CustomError(HttpCode.NOT_FOUND, 'Not found')
 }
 
 export {

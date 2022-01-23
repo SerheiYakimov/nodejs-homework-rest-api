@@ -4,20 +4,14 @@ import {
   EmailService,
   SenderSendGrid
 } from '../../service/email';
+import { CustomError } from '../../lib/custom-error';
 
 
 const registration = async (req, res, next) => {
-  try {
     const { email } = req.body;
     const isUserExist = await authService.isUserExist(email);
     if (isUserExist) {
-        return res.status(HttpCode.CONFLICT).json(
-        {
-        status: 'error',
-        code: HttpCode.CONFLICT,
-        message: 'Email in use',
-        });
-        
+      throw new CustomError(HttpCode.CONFLICT, 'Email in use');     
     }
     const userData = await authService.create(req.body);
     const emailService = new EmailService(
@@ -36,25 +30,15 @@ const registration = async (req, res, next) => {
         status: 'success',
         code: HttpCode.CREATED,
         data: { ...userData, isSendEmailVerify: isSend },
-        });
-    
-  } catch (error) {
-    next(error)
-  }
-    
+        });   
 }
 
 const login = async (req, res, _next) => {
     const { email, password } = req.body;
-    const user = await authService.getUser(email, password)
-    if (!user) {
-        return res.status(HttpCode.UNAUTORIZED).json(
-        {
-        status: 'error',
-        code: HttpCode.UNAUTORIZED,
-        message: 'Invalid credentials',
-        });
-        
+  const user = await authService.getUser(email, password)
+  console.log(user);
+  if (!user) {
+      throw new CustomError(HttpCode.UNAUTORIZED, 'Invalid credentials');
     }
     const token = authService.getToken(user);
     await authService.setToken(user.id, token);

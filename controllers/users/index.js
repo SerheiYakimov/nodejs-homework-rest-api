@@ -8,18 +8,14 @@ import {
   EmailService,
   SenderSendGrid
 } from '../../service/email';
+import { CustomError } from '../../lib/custom-error';
 
 
 const currentUser = async (req, res, _next) => {
 
     const { email, subscription } = req.user;
-    if (!req.user.token || !req.user.id) {
-      return res.status(HttpCode.UNAUTORIZED).json(
-        {
-        status: 'error',
-        code: HttpCode.UNAUTORIZED,
-        message: 'Not authorized',
-        })  
+  if (!req.user.token || !req.user.id) {
+      throw new CustomError(HttpCode.UNAUTORIZED, 'Not authorized');   
     }
     res.status(HttpCode.OK).json({
       status: "success",
@@ -57,18 +53,7 @@ const verifyUser = async (req, res, next) => {
       data: { message: 'Verification successful' },
     })
   }
-  // res
-  //   .status(HttpCode.NOT_FOUND)
-  //   .json({
-  //     status: 'error',
-  //     code: HttpCode.NOT_FOUND,
-  //     data: { message: 'User not found' },
-  //   })
-  res.status(HttpCode.BAD_REQUEST).json({
-    status: 'success',
-    code: HttpCode.BAD_REQUEST,
-    data: { message: 'Invalid token' },
-  })
+  throw new CustomError(HttpCode.BAD_REQUEST, 'Invalid token');  
 }
 
 const repeatEmailForVerifyUser = async (req, res, next) => {
@@ -95,27 +80,9 @@ const repeatEmailForVerifyUser = async (req, res, next) => {
     })
 
     }
-    //TODO
-    // return res
-    // .status(HttpCode.BAD_REQUEST)
-    // .json({
-    //   status: 'error',
-    //   code: HttpCode.BAD_REQUEST,
-    //   data: { message: 'Verification has already been passed' },
-    // })
-    return res.status(HttpCode.UE).json({
-      status: 'error',
-      code: HttpCode.UE,
-      data: { message: 'Unprocessable Entity' },
-    })
-
+    throw new CustomError(HttpCode.SU, 'Service Unavailable');  
   }
-  //TODO
-  res.status(HttpCode.NOT_FOUND).json({
-    status: 'error',
-    code: HttpCode.NOT_FOUND,
-    data: { message: 'User with email not found' },
-  })
+  throw new CustomError(HttpCode.NOT_FOUND, 'User with email not found');  
 }
 
 export { currentUser, uploadAvatar, verifyUser, repeatEmailForVerifyUser }
