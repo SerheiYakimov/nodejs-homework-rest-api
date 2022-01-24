@@ -33,15 +33,16 @@ const registration = async (req, res, next) => {
         });   
 }
 
-const login = async (req, res, _next) => {
+const login = async (req, res, next) => {
     const { email, password } = req.body;
   const user = await authService.getUser(email, password)
   console.log(user);
+  console.log(req.body);
   if (!user) {
       throw new CustomError(HttpCode.UNAUTORIZED, 'Invalid credentials');
     }
-    const token = authService.getToken(user);
-    await authService.setToken(user.id, token);
+  const token = authService.getToken(user);
+  await authService.setToken(user.id, token);
   res.status(HttpCode.OK).json(
     {
       status: 'success',
@@ -50,7 +51,7 @@ const login = async (req, res, _next) => {
     });
 }
 
-const logout = async (req, res, _next) => {
+const logout = async (req, res, next) => {
   await authService.setToken(req.user.id, null);
   res.status(HttpCode.NO_CONTENT).json(
     {

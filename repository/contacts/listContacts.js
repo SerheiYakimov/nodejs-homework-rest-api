@@ -7,10 +7,11 @@ export const listContacts = async ( userId, {
     filter,
     limit = 10,
     skip = 0,
+    favorite,
 }) => {
     let sortCriteria = null;
-    const total = await Contact.find({ favorite: true, owner: userId}).countDocuments();
-    let result = Contact.find({ favorite: true, owner: userId }).populate({
+    let total = await Contact.find({ owner: userId}).countDocuments();
+    let result = Contact.find({ owner: userId }).populate({
         path: 'owner',
         select: 'name email age role'
     });
@@ -22,6 +23,13 @@ export const listContacts = async ( userId, {
     }
     if (filter) {
         result = result.select(filter.split('|').join(' '))
+    }
+    if (favorite) {
+        total = await Contact.find({ favorite: true, owner: userId}).countDocuments();
+        result = Contact.find({ favorite: true, owner: userId }).populate({
+        path: 'owner',
+        select: 'name email age role'
+    });
     }
     result = await result
         .skip(Number(skip))

@@ -22,8 +22,10 @@ const updateToken = async (id, token) => {
 }
 
 const updateVerify = async (id, status) => {
-    return await User.updateOne({ _id: id },
-        { verify: status, verifyToken: null })
+    return await User.updateOne(
+        { _id: id },
+        { verify: status, verifyToken: null }
+    )
 }
 
 const updateAvatar = async (id, avatarURL) => {

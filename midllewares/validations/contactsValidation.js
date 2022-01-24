@@ -29,7 +29,7 @@ const updateFavoriteSchema = Joi.object({
 
 
 const querySchema = Joi.object({
-    favorite: Joi.bool().required(),
+    favorite: Joi.bool().optional(),
     limit: Joi.string().pattern(new RegExp('\\d+')).optional(),
     skip: Joi.number().min(0).optional(),
     sortBy: Joi.string().valid('name', 'email', 'age', 'phone', 'favorite').optional(),

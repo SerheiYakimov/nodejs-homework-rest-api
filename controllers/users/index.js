@@ -43,6 +43,7 @@ const uploadAvatar = async (req, res, next) => {
 const verifyUser = async (req, res, next) => {
   const verifyToken = req.params.token;
   const userFromToken = await repositoryUsers.findByVerifyToken(verifyToken);
+  console.log(verifyToken);
   if (userFromToken) {
     await repositoryUsers.updateVerify(userFromToken.id, true);
     return res
