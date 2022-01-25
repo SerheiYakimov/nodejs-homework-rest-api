@@ -6,12 +6,13 @@ import {
     validateSingup,
     validateLogin,
 } from '../../../midllewares/validations/usersValidation';
+import wrapperError from '../../../midllewares/error-handler';
 
 const router = new Router();
 
-router.post('/registration', limiter(15 * 60 * 1000, 2), validateSingup, registration);
-router.post('/login', validateLogin, login);
-router.post('/logout', guard, logout);
+router.post('/registration', limiter(15 * 60 * 1000, 2), validateSingup, wrapperError(registration));
+router.post('/login', validateLogin, wrapperError(login));
+router.post('/logout', guard, wrapperError(logout));
 
 
 export default router;
